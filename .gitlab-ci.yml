@@ -1,0 +1,25 @@
+include:
+  - project: "kmorris.dev/infrastructure/gitlab-ci-templates"
+    file: "templates/lint_docker.yaml"
+  - project: "kmorris.dev/infrastructure/gitlab-ci-templates"
+    file: "templates/build_and_scan_docker.yaml"
+
+stages:
+  - lint
+  - build
+
+lint:
+    stage: lint
+    variables:
+      DOCKERFILE: "3.22/Dockerfile"
+      HADOLINT_IGNORE: ""
+      REGISTRY: "docker.io"
+    extends: .lint_docker
+
+build:
+  stage: build
+  variables:
+    BUILD_PATH: "./3.22"
+    IMAGE: "alpine"
+    TAG: "3.22"
+  extends: .build_docker
